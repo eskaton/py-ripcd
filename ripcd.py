@@ -90,7 +90,7 @@ if __name__ == "__main__":
         if file.endswith(".inf"):
             path = os.path.join(work_dir, file)
 
-            with open(path, "r") as f:
+            with open(path, mode="r", encoding="iso8859-1") as f:
                 track = dict()
 
                 track['file'] = path[:-3] + "wav"
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     cddb_file = os.path.join(work_dir, "audio.cddb")
 
     if os.path.exists(cddb_file):
-        with open(cddb_file, "r") as f:
+        with open(cddb_file, mode="r", encoding="iso8859-1") as f:
             for line in f:
                 parts = re.split(r"\s*=\s*", line.rstrip(), 1)
 
