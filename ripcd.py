@@ -84,7 +84,11 @@ if __name__ == "__main__":
 
     atexit.register(shutil.rmtree, work_dir)
 
-    subprocess.check_call(["cdda2wav", "-alltracks", "-cddb", "1"])
+    cddb_env = os.environ.copy()
+    cddb_env["CDDBP_PORT"] = "888"
+    cddb_env["CDDBP_SERVER"] = "cddb.retrobridge.org"
+
+    subprocess.check_call(["cdda2wav", "-alltracks", "-cddb", "1"], env=cddb_env)
 
     for file in os.listdir(work_dir):
         if file.endswith(".inf"):
@@ -135,6 +139,6 @@ if __name__ == "__main__":
     album_args = ["--ta", artist, "--tl", title, "--ty", year, "--tg", genre]
 
     for track in tracks:
-        subprocess.check_call(["lame", "-b", str(bitrate), "-B", str(bitrate), "--tt", track['title'], "--tn",
-                               "{}/{}".format(track['track'], track_count)] + album_args +
-                              [track['file'], get_track_file(path_prefix, track)])
+        all_args = ["lame", "-b", str(bitrate), "-B", str(bitrate), "--tt", track['title'], "--tn", 
+                    "{}/{}".format(track['track'], track_count)] + album_args + [track['file'], get_track_file(path_prefix, track)]
+        subprocess.check_call(all_args)
